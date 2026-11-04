@@ -5,7 +5,7 @@ const params = new URLSearchParams(window.location.search);
 const imageId = parseInt(params.get('id'));
 if (!imageId) { window.location.href = '/gallery.html'; }
 
-// Studio state with History Stack for Undo/Reset
+// state
 let state = {
   imageId,
   originalUrl: '',
@@ -19,7 +19,7 @@ let state = {
 
 let historyStack = [];
 
-// Keyboard shortcut: Ctrl+Z for Undo
+// ctrl+z undo
 window.addEventListener('keydown', (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
     e.preventDefault();
@@ -27,7 +27,7 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-// Window resize listener to keep crop overlay aligned
+
 window.addEventListener('resize', () => {
   if (cropActive) {
     syncCropOverlaySize();
@@ -83,24 +83,21 @@ function updateFilterThumbnails(url) {
   if (tBlur) tBlur.style.backgroundImage = `url('${url}')`;
 }
 
-// ==========================================================================
-// Tool Tab Navigation
-// ==========================================================================
 function switchToolTab(tabName) {
-  // Update tab buttons
+  // doi tab
   const tabs = document.querySelectorAll('.tool-tab-btn');
   tabs.forEach(btn => {
     const onclickAttr = btn.getAttribute('onclick') || '';
     btn.classList.toggle('active', onclickAttr.includes(`'${tabName}'`));
   });
 
-  // Update panes
+  // chuyen pane
   const panes = document.querySelectorAll('.tool-pane');
   panes.forEach(p => p.classList.remove('active'));
   const targetPane = document.getElementById(`pane-${tabName}`);
   if (targetPane) targetPane.classList.add('active');
 
-  // Handle Watermark overlay
+  // watermark preview
   if (tabName === 'watermark') {
     updateWatermarkPreview();
   } else {
@@ -108,25 +105,22 @@ function switchToolTab(tabName) {
     if (wmEl) wmEl.classList.add('d-none');
   }
 
-  // Handle Crop overlay activation
+  // bat crop
   if (tabName === 'crop') {
     setCropActive(true);
   } else {
     setCropActive(false);
   }
 
-  // Reset live scale preview if leaving resize tab
+  
   if (tabName !== 'resize') {
     resetLiveScalePreview();
   }
 }
 
-// ==========================================================================
-// Interactive Crop Engine (Drag & Drop, 8 Anchor Handles, Free Draw)
-// ==========================================================================
 let cropActive = false;
 let cropBox = { x: 0, y: 0, w: 0, h: 0 };
-let dragMode = null; // 'move', 'draw', or handle name ('tl', 'tr', etc.)
+let dragMode = null; 
 let dragStartX = 0, dragStartY = 0;
 let initialBox = null;
 let cropDrawOrigin = { x: 0, y: 0 };
@@ -159,7 +153,7 @@ function resetCropBoxToDefault() {
   const dispW = img.clientWidth;
   const dispH = img.clientHeight;
 
-  // Default to 75% centered box
+  // box mac dinh
   const boxW = Math.max(40, Math.round(dispW * 0.75));
   const boxH = Math.max(40, Math.round(dispH * 0.75));
   const boxX = Math.round((dispW - boxW) / 2);
@@ -230,17 +224,17 @@ function initInteractiveCrop() {
 
     const handle = e.target.dataset.handle;
     if (handle) {
-      // Dragging a specific handle
+      // keo goc
       dragMode = handle;
       e.stopPropagation();
       e.preventDefault();
     } else if (e.target === cropEl || cropEl.contains(e.target)) {
-      // Dragging inside box to move
+      // di chuyen
       dragMode = 'move';
       e.stopPropagation();
       e.preventDefault();
     } else if (e.target === overlay) {
-      // Clicking on overlay outside box -> draw new box
+      // ve vung moi
       dragMode = 'draw';
       const rect = overlay.getBoundingClientRect();
       const clickX = Math.max(0, Math.min(clientX - rect.left, rect.width));
@@ -288,7 +282,7 @@ function initInteractiveCrop() {
       const h = Math.max(20, Math.abs(currY - cropDrawOrigin.y));
       cropBox = { x, y, w, h };
     } else {
-      // Resizing via handle
+      // thay doi size
       let { x, y, w, h } = initialBox;
       const minSize = 20;
 
@@ -323,22 +317,19 @@ function initInteractiveCrop() {
     dragMode = null;
   }
 
-  // Mouse events
+  // chuot
   cropEl.addEventListener('mousedown', handlePointerDown);
   overlay.addEventListener('mousedown', handlePointerDown);
   window.addEventListener('mousemove', handlePointerMove);
   window.addEventListener('mouseup', handlePointerUp);
 
-  // Touch events for mobile/trackpad
+  // cam ung
   cropEl.addEventListener('touchstart', handlePointerDown, { passive: false });
   overlay.addEventListener('touchstart', handlePointerDown, { passive: false });
   window.addEventListener('touchmove', handlePointerMove, { passive: false });
   window.addEventListener('touchend', handlePointerUp);
 }
 
-// ==========================================================================
-// Interactive Scale Slider, Presets & Live Canvas Preview
-// ==========================================================================
 function handleScaleSlider(percent) {
   document.getElementById('scalePercentDisplay').textContent = `${percent}%`;
   const ratio = parseInt(percent) / 100;
@@ -347,7 +338,7 @@ function handleScaleSlider(percent) {
   document.getElementById('resizeW').value = newW;
   document.getElementById('resizeH').value = newH;
 
-  // Live CSS scale preview on the canvas
+  
   applyLiveScalePreview(ratio);
 }
 
@@ -361,7 +352,7 @@ function applyScalePreset(factor) {
 function applyLiveScalePreview(scale) {
   const wrapper = document.getElementById('canvasWrapper');
   if (!wrapper) return;
-  // Apply smooth visual scale preview
+  
   wrapper.style.transform = `scale(${scale})`;
 }
 
@@ -401,11 +392,11 @@ function updateHistoryButtons() {
   if (btnReset) btnReset.disabled = !state.processedId;
 }
 
-// Transform execution with history push
+
 async function applyTransform(url, body) {
   showLoading(true);
   try {
-    // Push current state into history before making changes
+    
     historyStack.push({
       processedId: state.processedId,
       previewUrl: document.getElementById('previewImage').src,
@@ -423,7 +414,7 @@ async function applyTransform(url, body) {
     state.height = res.data.height;
     state.aspectRatio = res.data.width / res.data.height;
 
-    // Reset visual scale preview back to 100% since new dimensions are baked into the image
+    
     resetLiveScalePreview();
 
     const newUrl = res.data.previewUrl + '?t=' + Date.now();
@@ -432,7 +423,7 @@ async function applyTransform(url, body) {
     document.getElementById('canvasMeta').textContent = `${res.data.width} × ${res.data.height} px`;
     document.getElementById('imageMeta').textContent = `${res.data.width}×${res.data.height} px · ${formatFileSize(res.data.size)}`;
 
-    // Update input fields with new dimensions
+    
     document.getElementById('resizeW').value = res.data.width;
     document.getElementById('resizeH').value = res.data.height;
     document.getElementById('cropW').value = res.data.width;
@@ -443,7 +434,7 @@ async function applyTransform(url, body) {
     setCropActive(false);
     showToast('Áp dụng thành công!', 'success');
   } catch (err) {
-    // Revert history push on failure
+    
     historyStack.pop();
     updateHistoryButtons();
     showToast(err.message, 'error');
@@ -452,7 +443,7 @@ async function applyTransform(url, body) {
   }
 }
 
-// UNDO: Step back to previous edit
+// undo
 function handleUndo() {
   if (historyStack.length === 0) return;
   const prev = historyStack.pop();
@@ -477,7 +468,7 @@ function handleUndo() {
   showToast('Đã hoàn tác thao tác trước đó', 'info');
 }
 
-// RESET: Back to original uploaded image
+// reset
 function handleResetOriginal() {
   if (!state.processedId) return;
   historyStack = [];

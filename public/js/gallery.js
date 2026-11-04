@@ -32,6 +32,7 @@ async function loadGallery(page = 1) {
     grid.innerHTML = images.map(img => {
       const ext = (img.originalName.split('.').pop() || 'IMG').toUpperCase();
       const dims = (img.width && img.height) ? `${img.width} × ${img.height} px` : 'Gốc';
+      const fallbackSvg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='220' viewBox='0 0 400 220'%3E%3Crect width='100%25' height='100%25' fill='%23FFF9E6'/%3E%3Crect x='15' y='15' width='370' height='190' fill='%23FFFFFF' stroke='%23000000' stroke-width='3' rx='8'/%3E%3Ccircle cx='200' cy='95' r='32' fill='%23FFEE32' stroke='%23000000' stroke-width='3'/%3E%3Ccircle cx='200' cy='95' r='14' fill='%23000000'/%3E%3Ctext x='200' y='155' fill='%23000000' font-family='sans-serif' font-weight='800' font-size='13' text-anchor='middle'%3EBẢN XEM TRƯỚC%3C/text%3E%3C/svg%3E";
 
       return `
         <div class="card-studio" id="card-${img.id}">
@@ -39,10 +40,10 @@ async function loadGallery(page = 1) {
             <span class="preview-tag-format">${ext}</span>
             <span class="preview-tag-dims">${dims}</span>
             <img src="${img.thumbnailUrl}" alt="${img.originalName}" loading="lazy"
-                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22><rect fill=%22%23111827%22 width=%22400%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23ef4444%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22sans-serif%22 font-size=%2214%22>Ảnh lỗi</text></svg>'">
+                 onerror="this.onerror=null;this.src='${fallbackSvg}'">
           </div>
           <div class="card-body-studio">
-            <div class="d-flex justify-content-between align-items-center mb-1">
+            <div class="d-flex justify-content-between align-items-center mb-2">
               <span class="card-title-text" title="${img.originalName}">${img.originalName}</span>
               <span class="card-meta-text">${formatFileSize(img.size)}</span>
             </div>
@@ -50,13 +51,13 @@ async function loadGallery(page = 1) {
               <i class="bi bi-clock me-1"></i> ${img.createdAt || 'Vừa xong'}
             </div>
             <div class="d-flex align-items-center gap-2">
-              <a href="/editor.html?id=${img.id}" class="btn-card-edit flex-fill">
-                <i class="bi bi-sliders2 me-1"></i> Edit
+              <a href="/editor.html?id=${img.id}" class="btn-card-edit flex-fill text-decoration-none text-center">
+                <i class="bi bi-sliders2 me-1"></i> Sửa ảnh
               </a>
-              <button class="btn-card-icon" onclick="showDetail(${img.id})" title="View details">
+              <button class="btn-card-icon" onclick="showDetail(${img.id})" title="Chi tiết">
                 <i class="bi bi-info-circle"></i>
               </button>
-              <button class="btn-card-icon btn-card-danger" onclick="confirmDelete(${img.id})" title="Delete image">
+              <button class="btn-card-icon btn-card-danger" onclick="confirmDelete(${img.id})" title="Xoá ảnh">
                 <i class="bi bi-trash3"></i>
               </button>
             </div>
@@ -82,7 +83,7 @@ function renderPagination(current, total) {
   ul.innerHTML = html;
 }
 
-// Dropzone file handling
+// xu ly keo tha file
 function initDropzoneEvents() {
   const dropzone = document.getElementById('dropzoneArea');
   if (!dropzone) return;
@@ -185,7 +186,6 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', async () =
     bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
     const card = document.getElementById(`card-${deleteTargetId}`);
     if (card) card.remove();
-    // SEED-13: Content Bug - Success deletion shows red error toast
     showToast('Có lỗi xảy ra khi xóa ảnh', 'error');
     deleteTargetId = null;
   } catch (err) {

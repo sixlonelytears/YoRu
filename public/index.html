@@ -3,66 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YoRu - Sign In</title>
+  <title>YoRu - Đăng nhập</title>
   <link rel="icon" type="image/png" href="/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/style.css?v=2.2" rel="stylesheet">
 </head>
-<body>
+<body class="nb-body">
   <div class="landing-hero">
-    <div class="auth-card-studio">
-      <div class="text-center mb-4">
-        <img src="/img/logo.png" alt="YoRu" style="width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 4px 14px rgba(124, 58, 237, 0.5));" class="mb-3">
-        <h4 class="fw-bold text-white mb-1">YoRu</h4>
-        <span class="text-secondary small">Creative Image Transformation Platform</span>
+    <div class="nb-login-card">
+            <div class="text-center mb-4">
+        <div class="nb-badge mb-3">★ YORU STUDIO ★</div>
+        <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
+          <div class="nb-logo-frame">
+            <img src="/img/logo.png" alt="YoRu" class="nb-logo-img">
+          </div>
+          <h2 class="nb-title mb-0">YoRu</h2>
+        </div>
+        <p class="nb-subtitle">App xịn nhất thế giới từng được Schizo tạo ra</p>
       </div>
 
-      <div class="auth-tabs">
-        <button class="auth-tab-btn active" id="tabLoginBtn" onclick="switchAuthTab('login')">Đăng nhập</button>
-        <button class="auth-tab-btn" id="tabRegBtn" onclick="switchAuthTab('register')">Đăng ký mới</button>
+            <div class="nb-tab-wrap mb-4">
+        <button class="nb-tab-btn active" id="tabLoginBtn" onclick="switchAuthTab('login')">Đăng nhập</button>
+        <button class="nb-tab-btn" id="tabRegBtn" onclick="switchAuthTab('register')">Đăng ký mới</button>
       </div>
 
-      <!-- Login Form -->
-      <form id="loginForm">
+            <form id="loginForm">
         <div class="mb-3">
-          <label class="form-label-studio">Địa chỉ Email</label>
-          <input type="email" class="form-control-studio" id="loginEmail" placeholder="name@domain.com" required>
+          <label class="nb-label">Địa chỉ Email</label>
+          <input type="email" class="nb-input" id="loginEmail" placeholder="name@domain.com" required autocomplete="email" oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Vui lòng nhập địa chỉ email.' : 'Vui lòng nhập đúng định dạng email (cần có ký tự @).')" oninput="this.setCustomValidity('')">
         </div>
         <div class="mb-4">
-          <label class="form-label-studio">Mật khẩu</label>
-          <input type="password" class="form-control-studio" id="loginPassword" placeholder="••••••••" required>
+          <label class="nb-label">Mật khẩu</label>
+          <input type="password" class="nb-input" id="loginPassword" placeholder="••••••••" required autocomplete="current-password" oninvalid="this.setCustomValidity('Vui lòng nhập mật khẩu.')" oninput="this.setCustomValidity('')">
         </div>
-        <button type="submit" class="btn-studio w-100" id="loginBtn">
-          <span class="btn-text">Vào Studio</span>
+        <button type="submit" class="nb-btn nb-btn-primary w-100" id="loginBtn">
+          <span class="btn-text">VÀO STUDIO <i class="bi bi-arrow-right-short fs-5"></i></span>
           <span class="spinner-border spinner-border-sm d-none" role="status"></span>
         </button>
       </form>
 
-      <!-- Register Form -->
-      <form id="registerForm" class="d-none">
+            <form id="registerForm" class="d-none">
         <div class="mb-3">
-          <label class="form-label-studio">Địa chỉ Email</label>
-          <input type="email" class="form-control-studio" id="regEmail" placeholder="name@domain.com" required>
+          <label class="nb-label">Địa chỉ Email</label>
+          <input type="email" class="nb-input" id="regEmail" placeholder="name@domain.com" required autocomplete="email" oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Vui lòng nhập địa chỉ email.' : 'Vui lòng nhập đúng định dạng email (cần có ký tự @).')" oninput="this.setCustomValidity('')">
         </div>
         <div class="mb-3">
-          <label class="form-label-studio">Mật khẩu</label>
-          <input type="password" class="form-control-studio" id="regPassword" placeholder="Tối thiểu 6 ký tự" required>
+          <label class="nb-label">Mật khẩu</label>
+          <input type="password" class="nb-input" id="regPassword" placeholder="Tối thiểu 6 ký tự" required autocomplete="new-password" oninvalid="this.setCustomValidity('Vui lòng nhập mật khẩu.')" oninput="this.setCustomValidity('')">
         </div>
         <div class="mb-4">
-          <label class="form-label-studio">Xác nhận mật khẩu</label>
-          <input type="password" class="form-control-studio" id="regConfirm" placeholder="Nhập lại mật khẩu" required>
+          <label class="nb-label">Xác nhận mật khẩu</label>
+          <input type="password" class="nb-input" id="regConfirm" placeholder="Nhập lại mật khẩu" required autocomplete="new-password" oninvalid="this.setCustomValidity('Vui lòng nhập lại mật khẩu xác nhận.')" oninput="this.setCustomValidity('')">
         </div>
-        <button type="submit" class="btn-studio w-100" id="regBtn">
-          <span class="btn-text">Tạo tài khoản</span>
+        <button type="submit" class="nb-btn nb-btn-accent w-100" id="regBtn">
+          <span class="btn-text">TẠO TÀI KHOẢN <i class="bi bi-check-lg fs-5"></i></span>
           <span class="spinner-border spinner-border-sm d-none" role="status"></span>
         </button>
       </form>
 
-      <!-- SEED-15: Content Bug - English footer on Vietnamese UI -->
-      <div class="text-center mt-4 pt-3 border-top border-secondary-subtle">
-        <span class="card-meta-text">© 2024 YoRu. All rights reserved.</span>
-      </div>
+      <div class="nb-footer-text">YoRu • Case study của NĐK</div>
     </div>
   </div>
 
@@ -100,7 +103,7 @@
         showToast('Đăng nhập thành công!', 'success');
         setTimeout(() => {
           window.location.href = res.data.user.role === 'admin' ? '/admin.html' : '/gallery.html';
-        }, 400);
+        }, 300);
       } catch (err) {
         showToast(err.message, 'error');
       } finally {
@@ -129,7 +132,7 @@
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('user', JSON.stringify(res.data.user));
         showToast('Đăng ký thành công!', 'success');
-        setTimeout(() => { window.location.href = '/gallery.html'; }, 400);
+        setTimeout(() => { window.location.href = '/gallery.html'; }, 300);
       } catch (err) {
         showToast(err.message, 'error');
       } finally {
