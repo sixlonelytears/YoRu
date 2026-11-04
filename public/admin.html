@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - YoRu</title>
+  <title>Quản trị hệ thống - YoRu</title>
   <link rel="icon" type="image/png" href="/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/style.css?v=2.2" rel="stylesheet">
 </head>
-<body>
-  <!-- Pro Studio Navbar -->
-  <header class="navbar-studio">
+<body class="nb-body">
+    <header class="navbar-studio">
     <div class="studio-container d-flex justify-content-between align-items-center w-100">
       <div class="d-flex align-items-center gap-3">
         <a class="brand-wrap" href="/gallery.html">
@@ -19,15 +21,15 @@
           <span class="brand-name">YoRu</span>
         </a>
         <div class="nav-divider"></div>
-        <a class="nav-tab" href="/gallery.html"><i class="bi bi-grid-fill"></i> Gallery</a>
-        <a class="nav-tab active" id="navAdminLink" href="/admin.html"><i class="bi bi-shield-lock-fill"></i> Admin</a>
+        <a class="nav-tab" href="/gallery.html"><i class="bi bi-grid-fill"></i> Bộ sưu tập</a>
+        <a class="nav-tab active" id="navAdminLink" href="/admin.html"><i class="bi bi-shield-lock-fill"></i> Quản trị</a>
       </div>
       <div class="d-flex align-items-center gap-2">
         <div class="user-chip">
           <div class="user-avatar"><i class="bi bi-person-fill"></i></div>
           <span class="user-chip-email" id="navUserEmail"></span>
         </div>
-        <button class="nav-action-icon nav-action-danger" onclick="logout()" title="Thoát">
+        <button class="nav-action-icon nav-action-danger" onclick="logout()" title="Đăng xuất">
           <i class="bi bi-box-arrow-right"></i>
         </button>
       </div>
@@ -36,21 +38,20 @@
 
   <main class="studio-container py-4">
     <div class="mb-4">
-      <h2 class="page-title mb-1">Admin Dashboard</h2>
-      <p class="page-subtitle mb-0">Monitor studio resources and manage user accounts</p>
+      <h2 class="page-title mb-1">Bảng quản trị hệ thống</h2>
+      <p class="page-subtitle mb-0">Giám sát tài nguyên máy chủ và danh sách tài khoản thành viên</p>
     </div>
 
-    <!-- Stat Cards -->
-    <div class="row g-3 mb-4">
+        <div class="row g-3 mb-4">
       <div class="col-md-4">
         <div class="card-studio p-4">
           <div class="d-flex justify-content-between align-items-center">
             <div>
-              <span class="text-secondary small text-uppercase fw-semibold">Users</span>
-              <h3 class="text-white fw-bold mt-1 mb-0" id="statUsers">0</h3>
+              <span class="text-muted small text-uppercase fw-bold">Người dùng</span>
+              <h3 class="fw-bold mt-1 mb-0 text-dark" id="statUsers" style="font-size: 2.2rem;">0</h3>
             </div>
-            <div class="p-3 rounded-3 bg-primary bg-opacity-10 text-primary">
-              <i class="bi bi-people fs-4"></i>
+            <div class="p-3 rounded" style="background-color: var(--nb-yellow); border: 2px solid #000; box-shadow: 2px 2px 0 #000;">
+              <i class="bi bi-people-fill fs-3 text-dark"></i>
             </div>
           </div>
         </div>
@@ -59,11 +60,11 @@
         <div class="card-studio p-4">
           <div class="d-flex justify-content-between align-items-center">
             <div>
-              <span class="text-secondary small text-uppercase fw-semibold">Total Images</span>
-              <h3 class="text-white fw-bold mt-1 mb-0" id="statImages">0</h3>
+              <span class="text-muted small text-uppercase fw-bold">Tổng số ảnh</span>
+              <h3 class="fw-bold mt-1 mb-0 text-dark" id="statImages" style="font-size: 2.2rem;">0</h3>
             </div>
-            <div class="p-3 rounded-3 bg-success bg-opacity-10 text-success">
-              <i class="bi bi-images fs-4"></i>
+            <div class="p-3 rounded" style="background-color: var(--nb-cyan); border: 2px solid #000; box-shadow: 2px 2px 0 #000;">
+              <i class="bi bi-images fs-3 text-dark"></i>
             </div>
           </div>
         </div>
@@ -72,29 +73,28 @@
         <div class="card-studio p-4">
           <div class="d-flex justify-content-between align-items-center">
             <div>
-              <span class="text-secondary small text-uppercase fw-semibold">Storage Used</span>
-              <h3 class="text-white fw-bold mt-1 mb-0" id="statStorage">0 B</h3>
+              <span class="text-muted small text-uppercase fw-bold">Dung lượng ổ đĩa</span>
+              <h3 class="fw-bold mt-1 mb-0 text-dark" id="statStorage" style="font-size: 2.2rem;">0 B</h3>
             </div>
-            <div class="p-3 rounded-3 bg-warning bg-opacity-10 text-warning">
-              <i class="bi bi-hdd-network fs-4"></i>
+            <div class="p-3 rounded" style="background-color: var(--nb-coral); border: 2px solid #000; box-shadow: 2px 2px 0 #000;">
+              <i class="bi bi-hdd-network-fill fs-3 text-dark"></i>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Users Table -->
-    <div class="card-studio p-3">
-      <h6 class="text-white fw-bold mb-3 px-2 pt-2"><i class="bi bi-people-fill text-primary me-2"></i>Registered Accounts</h6>
+        <div class="card-studio p-3">
+      <h5 class="fw-bold mb-3 px-2 pt-2 text-dark"><i class="bi bi-people-fill me-2"></i>Danh sách tài khoản đã đăng ký</h5>
       <div class="table-responsive">
-        <table class="table table-dark table-hover mb-0">
+        <table class="table-studio">
           <thead>
-            <tr class="text-secondary small text-uppercase">
+            <tr>
               <th>ID</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Created At</th>
-              <th>Images</th>
+              <th>Địa chỉ Email</th>
+              <th>Vai trò</th>
+              <th>Ngày tạo</th>
+              <th>Số lượng ảnh</th>
             </tr>
           </thead>
           <tbody id="usersTable"></tbody>

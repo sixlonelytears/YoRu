@@ -90,32 +90,28 @@ async function getDb() {
 async function seedData() {
   const database = await getDb();
 
-  const existing = database.exec("SELECT COUNT(*) FROM users");
-  const userCount = existing[0].values[0][0];
-  if (userCount === 0) {
-    const adminPass = bcrypt.hashSync('admin123', 10);
-    const memberPass = bcrypt.hashSync('member123', 10);
+  const ensureUser = (email, pass, role) => {
+    const res = database.exec(`SELECT id FROM users WHERE email = '${email}'`);
+    if (!res.length || !res[0].values.length) {
+      const hash = bcrypt.hashSync(pass, 10);
+      database.run("INSERT INTO users (email, password, role) VALUES (?, ?, ?)", [email, hash, role]);
+    }
+  };
 
-    database.run(
-      "INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
-      ['admin@pictransform.com', adminPass, 'admin']
-    );
-    database.run(
-      "INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
-      ['member1@test.com', memberPass, 'member']
-    );
-    database.run(
-      "INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
-      ['member2@test.com', memberPass, 'member']
-    );
-  }
+  ensureUser('admin@pictransform.com', 'admin123', 'admin');
+  ensureUser('admin@yoru.com', 'admin123', 'admin');
+  ensureUser('member1@test.com', 'member123', 'member');
+  ensureUser('member2@test.com', 'member123', 'member');
+  ensureUser('test@yoru.com', 'test123', 'member');
 
   const member1Result = database.exec("SELECT id FROM users WHERE email = 'member1@test.com'");
   const member2Result = database.exec("SELECT id FROM users WHERE email = 'member2@test.com'");
+  const testYoruResult = database.exec("SELECT id FROM users WHERE email = 'test@yoru.com'");
   if (!member1Result.length || !member1Result[0].values.length) return;
 
   const member1Id = member1Result[0].values[0][0];
   const member2Id = member2Result[0].values[0][0];
+  const testYoruId = testYoruResult.length && testYoruResult[0].values.length ? testYoruResult[0].values[0][0] : null;
 
   const imgCheck = database.exec(`SELECT COUNT(*) FROM images WHERE user_id = ${member1Id} AND original_name != 'fake_corrupted.jpg'`);
   const validImgCount = imgCheck.length && imgCheck[0].values.length ? imgCheck[0].values[0][0] : 0;
@@ -137,6 +133,17 @@ async function seedData() {
     { userId: member2Id, w: 1024, h: 768, r: 0, g: 100, b: 0, name: 'forest-green.jpg' },
     { userId: member2Id, w: 960, h: 720, r: 139, g: 69, b: 19, name: 'brown-sample.jpg' },
   ];
+
+  if (testYoruId) {
+    imageConfigs.push(
+      { userId: testYoruId, w: 800, h: 600, r: 230, g: 57, b: 70, name: 'yoru-crimson.jpg' },
+      { userId: testYoruId, w: 1920, h: 1080, r: 241, g: 250, b: 238, name: 'yoru-fullhd.jpg' },
+      { userId: testYoruId, w: 3000, h: 600, r: 168, g: 218, b: 220, name: 'yoru-panoramic.jpg' },
+      { userId: testYoruId, w: 640, h: 480, r: 69, g: 123, b: 157, name: 'yoru-sea.jpg' },
+      { userId: testYoruId, w: 1024, h: 768, r: 29, g: 53, b: 87, name: 'yoru-deep-blue.jpg' },
+      { userId: testYoruId, w: 500, h: 500, r: 255, g: 209, b: 102, name: 'yoru-yellow.jpg' }
+    );
+  }
 
   for (const cfg of imageConfigs) {
     const filename = uuidv4() + '.jpg';

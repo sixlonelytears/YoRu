@@ -7,8 +7,11 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static frontend assets
 app.use(express.static(path.join(__dirname, 'public')));
 
+// API Routes
 const authRoutes = require('./routes/auth');
 const imageRoutes = require('./routes/images');
 const transformRoutes = require('./routes/transform');
@@ -19,17 +22,18 @@ app.use('/api/images', imageRoutes);
 app.use('/api/transform', transformRoutes);
 app.use('/api/admin', adminRoutes);
 
+// Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Global error handler
 app.use((err, req, res, next) => {
   console.error('Global error:', err.message);
   res.status(500).json({ success: false, message: 'Lỗi hệ thống' });
 });
 
-// Render Free Tier 24/7 Keep-Alive Worker
-// Automatically pings /api/health every 10 minutes to prevent Render from sleeping
+// Ping keep-alive worker for cloud hosting
 function initKeepAliveWorker() {
   const externalUrl = process.env.RENDER_EXTERNAL_URL || process.env.APP_URL;
   if (!externalUrl) return;
@@ -59,7 +63,7 @@ async function start() {
     console.log('Seed data ready');
 
     app.listen(PORT, () => {
-      console.log(`PicTransform Studio server running on port ${PORT}`);
+      console.log(`YoRu Studio server running on port ${PORT}`);
       initKeepAliveWorker();
     });
   } catch (err) {
