@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: pictransform-studio
+    name: yoru
     runtime: node
     plan: free
     region: singapore

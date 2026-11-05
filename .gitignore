@@ -1,8 +1,16 @@
 node_modules/
 .DS_Store
 *.log
-temp/
+temp/*
+!temp/.gitkeep
 processed/*
 !processed/.gitkeep
+uploads/*
+!uploads/.gitkeep
 *.db
 data/*.db
+tests/
+docs/
+*.docx
+*.xlsx
+*.pdf

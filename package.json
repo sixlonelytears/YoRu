@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "seed": "node -e \"require('./db').seedData().then(() => process.exit())\""
+    "seed": "node -e \"require('./db').seedData().then(() => process.exit())\"",
+    "test": "echo \"no test specified\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
